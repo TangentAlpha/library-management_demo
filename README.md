@@ -1,4 +1,4 @@
-# COMP4111 Project
+# Library management application
 
 [Link to project description](https://course.cse.ust.hk/comp4111/project.html)
 
