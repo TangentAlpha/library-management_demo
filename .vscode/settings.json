@@ -1,0 +1,4 @@
+{
+    // Enable Markdown link validation.
+    "markdown.validate.enabled": true
+}

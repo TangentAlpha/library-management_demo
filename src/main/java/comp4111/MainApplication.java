@@ -70,7 +70,7 @@ public class MainApplication {
             DatabaseConnectionPoolV2.getInstance().setDefaultLockTimeout(Duration.ofSeconds(3));
 
             server.start();
-            final var future = server.listen(new InetSocketAddress(8080));
+            final var future = server.listen(new InetSocketAddress(8082));
             final var listenerEndpoint = future.get();
             LOGGER.info("Listening on " + listenerEndpoint.getAddress());
             server.awaitShutdown(TimeValue.MAX_VALUE);

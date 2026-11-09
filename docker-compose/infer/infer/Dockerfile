@@ -1,10 +1,14 @@
 FROM debian:stretch-slim
 
-LABEL maintainer "Infer team"
-
-# mkdir the man/man1 directory due to Debian bug #863199
-RUN echo "deb http://deb.debian.org/debian stretch-backports main" >> /etc/apt/sources.list && \
+RUN printf '%s\n' \
+      'deb http://archive.debian.org/debian stretch main' \
+      'deb http://archive.debian.org/debian-security stretch/updates main' \
+      'deb http://archive.debian.org/debian stretch-backports main' \
+      > /etc/apt/sources.list && \
+    # Stretch repositories are archived and may have expired Release metadata. \
+    echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99archive && \
     apt-get update && \
+    # mkdir the man/man1 directory due to Debian bug #863199. \
     mkdir -p /usr/share/man/man1 && \
     apt-get install --yes --no-install-recommends \
       autoconf \

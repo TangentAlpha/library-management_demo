@@ -1,62 +1,65 @@
-# docker-compose for Infer
+# Infer with Docker Compose
 
-This directory contains a standard `docker-compose` script for starting Infer.
+This directory contains the Docker Compose configuration for starting the Infer analysis container.
+Run the commands below from this folder.
 
-## How to Use
+## Start the container
 
-### Starting the container
-
-To create and start the container:
-
+Create and start the container:
 ```sh
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
-Note that this process may take a while.
+This process may take a while to build the image and start the analysis environment.
 
-### Entering the container environment
+## Verify that the container is running
 
-To enter the container environment:
+Check that the container is active:
+```sh
+docker ps
+```
 
+You should see a container named `infer` in the output.
+
+## Enter the container shell
+
+To attach to the running container:
 ```sh
 docker attach infer
 ```
 
-When attaching to a container, files in the current project root will be copied into the container. This is to avoid 
-Gradle creating files as the `root` user in the project, which will cause `Permission denied` errors when running Gradle
-with the normal user.
+When you attach to the container, files from the current project root are copied into the container.
+This avoids Gradle in the container creating files as the `root` user in the host's project directory, which can lead to `Permission denied` errors when running Gradle as a normal user outside the container.
 
-Special Paths:
+### Important paths inside the container
 
-- `/mnt`: Read-only view of the project files in the host filesystem
-- `/root/project`: Working directory for running Infer on the project
+- `/mnt/`: read-only view of the project files in the host filesystem
+- `/root/project/`: working directory for running Infer on the project
 
-### Stopping the container
-
-To stop the container:
+## Stop the container
 
 ```sh
-docker-compose stop
+docker compose stop
 ```
 
-### Removing the container
-
-To remove the container:
+## Remove the container
 
 ```sh
-docker-compose down
+docker compose down
 ```
 
-### Customization
+## Customize the project root
 
-By default, the root of the current project (`../../`) is used as the project root. To use another directory as the 
-project root, edit the line in `docker-compose.yml`:
+By default, the root of the current project (`../../`) is used as the project root.
+To use a different directory instead, edit the relevant line in `docker-compose.yml`:
 
 ```diff
      volumes:
        - type: bind
--        source: ../../
+-        source: ../..
 +        source: /path/to/dir
          target: /mnt
          read_only: true
 ```
+
+This changes the directory that Infer sees inside the container at `/mnt/`.

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AgentCommitMessageProject"><![CDATA[{
+  "mode": "CUSTOM",
+  "instruction": "Avoid overly verbose descriptions or unnecessary details.\n\n- Use Markdown syntax, especially backticks around inline code.\n- Keep the first line (the header) to a single sentence of no more than 72 characters, with no full stop at the end.\n- Follow the header with a blank line.\n- Do not wrap the remaining text (the body).\n- End each sentence in the body with appropriate punctuation, usually a full stop."
+}]]></component>
   <component name="CommitMessageInspectionProfile">
     <profile version="1.0">
-      <inspection_tool class="BodyLimit" enabled="true" level="WARNING" enabled_by_default="true" />
       <inspection_tool class="SubjectBodySeparation" enabled="true" level="WARNING" enabled_by_default="true" />
       <inspection_tool class="SubjectLimit" enabled="true" level="WARNING" enabled_by_default="true" />
     </profile>
