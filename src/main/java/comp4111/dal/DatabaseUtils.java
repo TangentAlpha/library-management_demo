@@ -230,4 +230,66 @@ public class DatabaseUtils {
             }).join();
         }
     }
+
+    /**
+     * Checks whether the first default book exists in the database by title.
+     * If it does, the default books are assumed to already be inserted and no further action is taken.
+     * Existing book details and availability are preserved.
+     */
+    public static void createDefaultBooks() {
+        final String[] titles = {
+                "Calculus Early Transcendentals, 7th Edition",
+                "University Physics with Modern Physics, 14th Edition",
+                "Chemistry - An Atoms First Approach, 2nd Edition",
+                "Interactive Python Programming for Beginners",
+                "Discrete Mathematics and Its Applications, 7th Edition",
+                "Discrete Mathematics for Computer Scientists",
+                "Signal and Systems, 2nd Edition",
+                "Linear Algebra and Its Applications, 5th Edition",
+                "Probability & Statistics for Engineers & Scientists, 9th Edition",
+                "C++ for Everyone, 2nd Edition",
+                "C++ How to Program, 10th Edition",
+                "Data Structures and Algorithm Analysis in C++, 4th Edition",
+                "Computer Organization and Design, 5th Edition",
+                "Principles of Microeconomics, 7th Edition",
+                "Object-Oriented Software Engineering using UML, Patterns, and Java, 3rd Edition",
+                "Operating System Concepts, 9th Edition",
+                "Introduction to Algorithms, 3rd Edition",
+                "Sociology - A Down-to-Earth Approach, 11th Edition",
+                "Introduction to Java Programming and Data Structures, 11th Edition",
+                "Database System Concepts, 6th Edition",
+                "Principles of Database Management, 1st Edition",
+                "The Computing Universe - A Journey through a Revolution",
+                "Information Security Principles and Practice, 2nd Edition",
+                "Introduction to Computer Security, 1st Edition",
+                "Computer Graphics - Principles and Practice, 2nd Edition in C"
+        };
+
+        DatabaseConnectionPoolV2.getInstance().execStmt(connection -> {
+            try (var stmt = connection.prepareStatement("SELECT 1 FROM Book WHERE title = ? LIMIT 1")) {
+                stmt.setString(1, titles[0]);
+                try (var result = stmt.executeQuery()) {
+                    if (result.next()) {
+                        return null;
+                    }
+                }
+            }
+
+            try (var stmt = connection.prepareStatement(
+                    "INSERT INTO Book (title, author, publisher, year, available) VALUES (?, ?, ?, ?, ?) " +
+                            "ON DUPLICATE KEY UPDATE id = id")) {
+                for (int i = 0; i < titles.length; i++) {
+                    stmt.setString(1, titles[i]);
+                    stmt.setString(2, String.valueOf((char) ('A' + i)));
+                    stmt.setString(3, String.valueOf((char) ('a' + i)));
+                    stmt.setInt(4, 1990 + i);
+                    stmt.setBoolean(5, true);
+                    stmt.addBatch();
+                }
+                stmt.executeBatch();
+            }
+            LOGGER.info("Default books are created");
+            return null;
+        }).join();
+    }
 }
