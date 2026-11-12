@@ -12,6 +12,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -96,7 +98,12 @@ public class HttpUtils {
             }
             final var chunkKey = queryChunk.substring(0, equalDelimiter);
             final var chunkVal = queryChunk.substring(equalDelimiter + 1);
-            params.put(chunkKey, chunkVal);
+            try {
+                params.put(URLDecoder.decode(chunkKey, StandardCharsets.UTF_8),
+                        URLDecoder.decode(chunkVal, StandardCharsets.UTF_8));
+            } catch (IllegalArgumentException e) {
+                throw new CompletionException("Malformed query encoding", new HttpHandlingException(HttpStatus.SC_BAD_REQUEST));
+            }
 
             path = nextDelimiter != -1 ? path.substring(nextDelimiter + 1) : "";
         }

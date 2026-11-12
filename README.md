@@ -19,9 +19,9 @@ This project contains several applications which may be run for various purposes
 Before executing any of the following examples, ensure that the default Java installation is set to JDK 11.
 See [FAQs](#faqs) for more information.
 
-### Running the application
+### Backend
 
-Before starting the application, ensure that the MySQL server is running.
+Before starting the Java application, ensure that the MySQL server is running.
 See the MySQL setup guide in [`./docker-compose/mysql/`](./docker-compose/mysql/) for the required Docker commands and default credentials.
 
 For a first-time setup, initialize the database before running the app.
@@ -43,7 +43,7 @@ The application is running when an output similar to the following is displayed 
 
 You should wait for the message `Listening on ...:8082` before starting your testing.
 
-### Running custom Gradle tasks
+#### Custom Gradle tasks
 
 This project contains several additional Gradle tasks that may be useful.
 You can run one with `./gradlew <task-name>`, for example `./gradlew runFreshDb`.
@@ -56,7 +56,7 @@ You can run one with `./gradlew <task-name>`, for example `./gradlew runFreshDb`
 
 It is recommended to run `runFreshDb` or `runFreshTables` before testing, so the database is rebuilt from a clean state and no leftover data can interfere with the test cases.
 
-### Running unit tests
+#### Unit tests
 
 Unit tests can be run using the following command:
 ```sh
@@ -66,16 +66,29 @@ Unit tests can be run using the following command:
 Note that unit tests **will recreate the database on every invocation**.
 There is currently no way to change this.
 
-### Running Infer
+#### Infer
 
 Check [`./docker-compose/infer/`](./docker-compose/infer/) for instructions on running Infer to perform static analysis.
 
-### Cleaning the project
+#### Clean build artifacts
 
 To remove all generated build artifacts so that the project can be rebuilt from scratch, run the following command:
 ```sh
 ./gradlew clean
 ```
+
+### Frontend
+
+With the MySQL database and the backend Java application running, start the frontend with:
+```sh
+cd frontend
+npm install
+npm run dev
+```
+
+Open the local URL printed by Vite (normally <http://localhost:3000/>).
+
+Run frontend lint checks with `npm run lint` from `frontend/`.
 
 ## Project structure
 

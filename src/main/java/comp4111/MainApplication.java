@@ -66,6 +66,7 @@ public class MainApplication {
                 DatabaseUtils.createTableSchemas(true);
             }
             DatabaseUtils.createDefaultUsers();
+            DatabaseUtils.createDefaultBooks();
 
             DatabaseConnectionPoolV2.getInstance().setDefaultLockTimeout(Duration.ofSeconds(3));
 
